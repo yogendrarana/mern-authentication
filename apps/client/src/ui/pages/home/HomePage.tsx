@@ -1,12 +1,14 @@
-import { Link } from "@tanstack/react-router";
+import Navbar from "../../components/navbar/Navbar";
 
 const HomePage = () => {
     return (
-        <div>
-            <h1>MERN JWT AUTH</h1>
-            <Link to="/">Home</Link>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
+        <div className="p-[1rem]">
+            <Navbar />
+
+            <div className="mt-[2rem] flex flex-col items-center">
+                <h1>Welcome to Home Page</h1>
+            </div>
+
         </div>
     )
 }
