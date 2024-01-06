@@ -9,11 +9,10 @@ export const profileRoute = new Route({
     getParentRoute: () => rootRoute,
     path: "profile",
     component: ProfilePage,
-    beforeLoad: () => {
+    beforeLoad: ({ location }) => {
         const { isAuthenticated } = useAuthStore.getState();
-
         if (!isAuthenticated) {
-            throw redirect({ to: "/login" });
+            throw redirect({ to: "/login", search: { redirect: location.href, }, });
         }
     }
 });
