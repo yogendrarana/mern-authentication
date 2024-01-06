@@ -4,6 +4,7 @@ import { RootRoute, Route, Router } from '@tanstack/react-router'
 // import routes
 import * as authRoutes from './authRoutes'
 import * as userRoutes from './userRoutes'
+import * as adminRoutes from './adminRoutes'
 
 
 // import components
@@ -29,7 +30,8 @@ export const indexRoute = new Route({
 export const routeTree = rootRoute.addChildren([
     indexRoute,
     authRoutes.loginRoute, authRoutes.registerRoute,
-    userRoutes.profileRoute
+    userRoutes.profileRoute,
+    adminRoutes.adminRoutes, adminRoutes.adminIndexRoute
 ]);
 
 

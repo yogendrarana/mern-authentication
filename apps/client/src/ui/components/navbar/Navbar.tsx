@@ -10,6 +10,7 @@ const Navbar = () => {
                 <Link to="/login" className="border px-[0.25rem]">Login</Link>
                 <Link to="/register" className="border px-[0.25rem]">Register</Link>
                 <Link to="/profile" className="border px-[0.25rem]">Profile</Link>
+                <Link to="/admin" className="border px-[0.25rem]">Admin</Link>
             </div>
         </div>
     )
