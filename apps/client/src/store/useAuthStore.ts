@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import { axios } from "../api/axios";
+import axios from "../axios/axios";
 import { devtools } from "zustand/middleware";
 
-interface AuthState {
-    // states
+// auth states
+interface AuthStates {
     isLoading: boolean,
     isError: boolean,
     message: string | null,
@@ -11,24 +11,32 @@ interface AuthState {
     authUser: unknown,
     isAuthenticated: boolean,
     accessToken: string | null,
+}
 
-    // actions
+// auth actions
+interface AuthActions {
     loginUser: (credentials: { email: string, password: string }) => void,
     registerUser: (credentials: { email: string, password: string }) => void,
     logoutUser: () => void,
 }
 
-export const useAuthStore = create<AuthState>()(
+
+// initial states
+const initialState: AuthStates = {
+    message: null,
+    isError: false,
+    isLoading: false,
+
+    authUser: null,
+    accessToken: null,
+    isAuthenticated: false,
+};
+
+export const useAuthStore = create<AuthStates & AuthActions>()(
     devtools((set) => ({
 
-        // State
-        message: null,
-        isError: false,
-        isLoading: false,
-
-        authUser: null,
-        accessToken: null,
-        isAuthenticated: false,
+        // initial states
+        ...initialState,
 
         // login action
         loginUser: async (credentials) => {
