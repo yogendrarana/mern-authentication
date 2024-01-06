@@ -8,6 +8,8 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
     response => response,
     error => {
+        // console.log("error-response", error.response);
+
         if (error.response.status === 401 || error.response.status === 403) {
             window.location.href = '/login';
         }
