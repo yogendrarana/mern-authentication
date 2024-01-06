@@ -6,7 +6,7 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
 
     // zustand store
-    const { loginUser, isLoading } = useAuthStore();
+    const { loginUser, isLoading } = useAuthStore.getState();
 
 
     // login handler

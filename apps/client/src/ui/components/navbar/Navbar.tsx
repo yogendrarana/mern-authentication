@@ -6,9 +6,10 @@ const Navbar = () => {
             <h1>MERN JWT AUTH</h1>
 
             <div className="flex gap-[1rem]">
-                <Link to="/">Home</Link>
-                <Link to="/login">Login</Link>
-                <Link to="/register">Register</Link>
+                <Link to="/" className="border px-[0.25rem]">Home</Link>
+                <Link to="/login" className="border px-[0.25rem]">Login</Link>
+                <Link to="/register" className="border px-[0.25rem]">Register</Link>
+                <Link to="/profile" className="border px-[0.25rem]">Profile</Link>
             </div>
         </div>
     )

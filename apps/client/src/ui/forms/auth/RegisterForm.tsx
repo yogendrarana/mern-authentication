@@ -6,7 +6,7 @@ const RegisterForm = () => {
     const [password, setPassword] = useState('');
 
     // zustand store
-    const { registerUser, isLoading } = useAuthStore();
+    const { registerUser, isLoading } = useAuthStore.getState();
 
 
     // login handler

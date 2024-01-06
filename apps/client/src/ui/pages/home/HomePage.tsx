@@ -1,8 +1,8 @@
-import { useAuthStore } from "../../../store/useAuthStore";
 import Navbar from "../../components/navbar/Navbar";
+import { useAuthStore } from "../../../store/useAuthStore";
 
 const HomePage = () => {
-    const { isAuthenticated, accessToken } = useAuthStore();
+    const { isAuthenticated, accessToken } = useAuthStore.getState();
 
     return (
         <div className="p-[1rem]">
@@ -16,7 +16,6 @@ const HomePage = () => {
                     <h3>Access Token: {accessToken ? accessToken.slice(0, 25) + "..." : "No access token"}</h3>
                 </div>
             </div>
-
         </div>
     )
 }

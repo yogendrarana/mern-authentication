@@ -8,7 +8,11 @@ const useRefreshToken = () => {
         });
 
         // update the access token in the store
-        useAuthStore.setState((state) => ({ ...state, accessToken: data.data.accessToken }));
+        useAuthStore.setState((state) => ({ 
+            ...state, 
+            accessToken: data.data.accessToken,
+            authUser: data.data.user,
+        }));
 
         return data.data.accessToken;
     }
