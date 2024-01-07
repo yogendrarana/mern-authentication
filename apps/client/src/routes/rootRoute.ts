@@ -8,8 +8,8 @@ import * as adminRoutes from './adminRoutes'
 
 
 // import components
-import HomePage from '../ui/pages/home/HomePage';
-import RootLayout from '../ui/layouts/RootLayout';
+import HomePage from '../app/pages/home/HomePage';
+import RootLayout from '../app/layouts/RootLayout';
 
 
 // rootRoute is the root route for the app

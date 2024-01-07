@@ -4,12 +4,12 @@ import express from 'express'
 import cookieParser from 'cookie-parser';
 import { connectdb } from './src/config/database.js';
 import { corsOptions } from './src/config/corsOptions.js';
-import { credentials } from './src/middlewares/credentialsMiddleware.js';
 
 // import middleware
 import ErrorMiddleware from './src/middlewares/errorMiddleware.js';
 
 // import routes
+import userRoutes from './src/routes/userRoutes.js'
 import authRoutes from './src/routes/authRoutes.js'
 import adminRoutes from './src/routes/adminRoutes.js'
 import tokenRoutes from './src/routes/tokenRoutes.js'
@@ -21,7 +21,6 @@ dotenv.config({path: '.env'});
 const app = express();
 
 // middlewares
-app.use(credentials)
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors(corsOptions))
@@ -37,9 +36,11 @@ const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Listening on port number ${PORT}`));
 
 // routes
+app.use("/api/v1/user", userRoutes)
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/admin", adminRoutes)
 app.use("/api/v1/token", tokenRoutes)
+
 
 // error middleware
 app.use(ErrorMiddleware);

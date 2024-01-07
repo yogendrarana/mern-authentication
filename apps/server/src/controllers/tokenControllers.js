@@ -14,11 +14,13 @@ export const handleRefreshToken = asyncHandler(async (req, res, next) => {
         if (err || decoded._id.toString() !== user._id.toString()) return next(new ErrorHandler("Invalid token. Please login to continue!", 403));
 
         const accessToken = user.createAccessToken();
+        
         res.status(200).json({
             success: true,
             message: "Access token generated successfully!",
             data: {
-                accessToken
+                accessToken,
+                user
             }
         })
     })

@@ -1,19 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "../../../store/useAuthStore";
+import { useNavigate } from "@tanstack/react-router";
 
-const RegisterForm = () => {
+const LoginForm = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     // zustand store
-    const { registerUser, isLoading } = useAuthStore.getState();
-
+    const { loginUser, isLoading, isAuthenticated } = useAuthStore.getState();
 
     // login handler
     const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        registerUser({email, password})
+        loginUser({ email, password })
+        navigate({ to: '/' });
     }
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate({ to: '/' });
+        }
+    }, [isAuthenticated, navigate]);
 
 
     return (
@@ -36,15 +44,15 @@ const RegisterForm = () => {
                 className="border-b-2 placeholder:text-center"
             />
 
-            <button 
-                type="submit" 
+            <button
+                type="submit"
                 disabled={isLoading}
                 className="border-2 p-[0.5rem] rounded-md hover:bg-gray-200"
             >
-                Register
+                Login
             </button>
         </form>
     )
 }
 
-export default RegisterForm;
+export default LoginForm;

@@ -1,9 +1,11 @@
 import { rootRoute } from './rootRoute';
-import { Route, redirect } from "@tanstack/react-router";
-import ProfilePage from '../ui/pages/profile/ProfilePage';
 import { useAuthStore } from '../store/useAuthStore';
+import { Route, redirect } from "@tanstack/react-router";
+
+
 
 // import pages
+import ProfilePage from '../app/pages/profile/ProfilePage';
 
 export const profileRoute = new Route({
     getParentRoute: () => rootRoute,

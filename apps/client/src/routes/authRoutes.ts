@@ -2,8 +2,8 @@ import { rootRoute } from './rootRoute';
 import { Route } from "@tanstack/react-router";
 
 // import pages
-import LoginPage from '../ui/pages/auth/LoginPage';
-import RegisterPage from '../ui/pages/auth/RegisterPage';
+import LoginPage from '../app/pages/auth/LoginPage';
+import RegisterPage from '../app/pages/auth/RegisterPage';
 
 
 // login route

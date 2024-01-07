@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast"
+import { useEffect, useState } from "react"
 import { Outlet } from "@tanstack/react-router"
-import useRefreshToken from "../../hooks/useRefreshToken";
-import { useAuthStore } from "../../store/useAuthStore";
 
+// hooks
+import { useAuthStore } from "../../store/useAuthStore"
+import useRefreshToken from "../../hooks/useRefreshToken"
 
 const RootLayout = () => {
     const refresh = useRefreshToken();
@@ -32,14 +34,23 @@ const RootLayout = () => {
 
         // Avoids unwanted call to verifyRefreshToken
         !accessToken ? verifyRefreshToken() : setIsLoading(false);
-        
+
+        // const refreshTokenInterval = setInterval(async () => {
+        //     await refresh();
+        // }, 5000);
+
         return () => {
             isMounted = false;
+            // clearInterval(refreshTokenInterval);
         }
     }, []);
 
-    // return
-    return <Outlet />
+    return (
+        <>
+            <Outlet />
+            <Toaster />
+        </>
+    )
 }
 
 export default RootLayout;

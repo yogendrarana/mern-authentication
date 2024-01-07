@@ -1,14 +1,21 @@
 import { rootRoute } from "./rootRoute";
-import { Route } from "@tanstack/react-router";
+import { useAuthStore } from "../store/useAuthStore";
+import { Route, redirect } from "@tanstack/react-router";
 
 // import pages
-import AdminLayout from "../ui/layouts/AdminLayout";
-import Dashboard from "../ui/pages/admin/Dashboard";
+import AdminLayout from "../app/layouts/AdminLayout";
+import Dashboard from "../app/pages/admin/Dashboard";
 
 export const adminRoutes = new Route({
     getParentRoute: () => rootRoute,
     path: "admin",
     component: AdminLayout,
+    beforeLoad: () => {
+        const { isAuthenticated, accessToken } = useAuthStore.getState();
+        if (!isAuthenticated || !accessToken) {
+            throw redirect({ to: "/login" });
+        }
+    }
 });
 
 export const adminIndexRoute = new Route({

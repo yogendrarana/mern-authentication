@@ -1,11 +1,11 @@
 import { create } from "zustand";
 import axios from "../axios/axios";
 import { devtools } from "zustand/middleware";
+import * as UserTypes from "../types/user.type";
 
 // auth states
 interface AuthStates {
     isLoading: boolean,
-    isError: boolean,
     message: string | null,
 
     authUser: unknown,
@@ -15,8 +15,8 @@ interface AuthStates {
 
 // auth actions
 interface AuthActions {
-    loginUser: (credentials: { email: string, password: string }) => void,
-    registerUser: (credentials: { email: string, password: string }) => void,
+    loginUser: (credentials: UserTypes.LoginCredentialsType) => void,
+    registerUser: (credentials: UserTypes.RegisterCredentialsType) => void,
     logoutUser: () => void,
 }
 
@@ -24,7 +24,6 @@ interface AuthActions {
 // initial states
 const initialState: AuthStates = {
     message: null,
-    isError: false,
     isLoading: false,
 
     authUser: null,
@@ -41,14 +40,7 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
         // login action
         loginUser: async (credentials) => {
             try {
-                set({ isLoading: true });
-                const { data } = await axios.post('/auth/login', credentials, {
-                    withCredentials: true,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                    }
-                });
+                set({ isLoading: true }); const { data } = await axios.post('/auth/login', credentials, { withCredentials: true, });
 
                 set((state) => ({
                     ...state,
@@ -63,7 +55,6 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
             } catch (err: any) {
                 set((state) => ({
                     ...state,
-                    isError: true,
                     isLoading: false,
                     isAuthenticated: false,
                     message: err.response.data.message,
@@ -72,7 +63,33 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
         },
 
         // register action
-        registerUser: () => { },
+        registerUser: async (credentials) => {
+            try {
+                set({ isLoading: true });
+                const { data, status } = await axios.post('/auth/register', credentials, {
+                    withCredentials: true
+                });
+
+                if (status === 201) {
+                    set({
+                        isLoading: false,
+                        isAuthenticated: true,
+                        message: data.message,
+                        authUser: data.data.user,
+                        accessToken: data.data.accessToken
+                    });
+                }
+
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (err: any) {
+                set((state) => ({
+                    ...state,
+                    isLoading: false,
+                    isAuthenticated: false,
+                    message: err.response.data.message,
+                }));
+            }
+        },
 
         // logout action
         logoutUser: () => { },
