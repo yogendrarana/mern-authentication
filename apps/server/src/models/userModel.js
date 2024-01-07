@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please enter the password!'],
         minLength: [6, "Password should be at least six characters long!"]
     },
-
+    role: { type: String, enum: ['user', 'admin', 'employee'], default: 'user' },
     refreshToken: { type: String },
 }, {
     timestamps: true,

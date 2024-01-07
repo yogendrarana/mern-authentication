@@ -35,13 +35,8 @@ const RootLayout = () => {
         // Avoids unwanted call to verifyRefreshToken
         !accessToken ? verifyRefreshToken() : setIsLoading(false);
 
-        // const refreshTokenInterval = setInterval(async () => {
-        //     await refresh();
-        // }, 5000);
-
         return () => {
             isMounted = false;
-            // clearInterval(refreshTokenInterval);
         }
     }, []);
 

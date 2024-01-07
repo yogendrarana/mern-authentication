@@ -5,7 +5,7 @@ const AdminLayout = () => {
         <div>
             <p>Admin Layout</p>
 
-            <Outlet />
+            <Outlet />a
         </div>
     )
 }
