@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../../../store/useAuthStore";
 import { useNavigate } from "@tanstack/react-router";
+import toast from "react-hot-toast";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -8,20 +9,32 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
 
     // zustand store
-    const { loginUser, isLoading, isAuthenticated } = useAuthStore.getState();
+    const { loginUser, isLoading, isAuthenticated, message } = useAuthStore();
 
     // login handler
     const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        if (!email || !password) {
+            return toast.error('Please fill in all fields');
+        }
+
         loginUser({ email, password })
-        navigate({ to: '/' });
     }
 
+    
     useEffect(() => {
-        if (isAuthenticated) {
+        if (isAuthenticated && message) {
+            toast.success(message);
             navigate({ to: '/' });
         }
-    }, [isAuthenticated, navigate]);
+
+        if (!isAuthenticated && message) {
+            toast.error(message);
+        }
+
+        useAuthStore.setState((state) => ({ ...state, message: null }));
+    }, [isAuthenticated, message, navigate]);
 
 
     return (

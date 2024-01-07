@@ -27,13 +27,20 @@ const useAxiosPrivate = () => {
             async error => {
                 const prevRequest = error?.config;
 
-                if (error.response.status === (401 || 403) && !prevRequest?.isSent) {
+                if ((error.response.status === 401 || error.response.status === 403) && !prevRequest?.isSent) {
                     // set the flag so that we don't retry the request
                     prevRequest.isSent = true;
 
-                    // get new access token
+                    // get the new access token
                     const accessToken = await refresh();
 
+                    // if access token is null, make the user login again
+                    // because refresh token is expired
+                    if (!accessToken) {
+                        return Promise.reject(error);
+                    }
+
+                    // update the headers
                     prevRequest.headers.Authorization = `Bearer ${accessToken}`;
 
                     return axiosPrivate(prevRequest);

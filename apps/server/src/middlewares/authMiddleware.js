@@ -5,11 +5,11 @@ import ErrorHandler from "../util/errorHandler.js";
 // verify access token
 export const verifyAccessToken = (req, res, next) => {
     const authHeader = req.headers.authorization || req.headers.Authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) return next(new ErrorHandler("Bearer token is unavailable!", 401));
+    if (!authHeader || !authHeader.startsWith('Bearer ')) return next(new ErrorHandler("Bearer token is not available!", 401));
     const accessToken = authHeader.split(' ')[1];
     jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
         if (err) {
-            return next(new ErrorHandler("Forbidden", 403))
+            return next(new ErrorHandler("Invalid access token.", 403))
         };
 
         req.user = await User.findById(decoded._id);

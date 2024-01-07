@@ -36,13 +36,13 @@ const RegisterForm = () => {
         if (isAuthenticated && message) {
             toast.success(message);
             navigate({ to: '/' });
-            useAuthStore.setState((state) => ({ ...state, message: null }));
         }
 
         if (!isAuthenticated && message) {
             toast.error(message);
-            useAuthStore.setState((state) => ({ ...state, message: null }));
         }
+        
+        useAuthStore.setState((state) => ({ ...state, message: null }));
     }, [isAuthenticated, message, navigate]);
 
 

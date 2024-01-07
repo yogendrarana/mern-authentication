@@ -5,7 +5,6 @@ import * as adminController from "../controllers/adminController.js";
 
 const router = express.Router();
 
-router.route('/').get(authMiddleware.verifyAccessToken, roleMiddleware.verifyAdmin);
 router.route('/users').get(authMiddleware.verifyAccessToken, roleMiddleware.verifyAdmin, adminController.getUsers);
 
 export default router;

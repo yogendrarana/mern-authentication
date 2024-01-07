@@ -5,7 +5,7 @@ import ErrorHandler from "../util/errorHandler.js";
 
 export const handleRefreshToken = asyncHandler(async (req, res, next) => {
     const { refreshToken } = req.cookies;
-    if (!refreshToken) return next(new ErrorHandler("Token is unavailable. Please login to continue!", 401));
+    if (!refreshToken) return next(new ErrorHandler("Refresh token is not available. Please login to continue!", 401));
 
     const user = await User.findOne({ refreshToken });
     if (!user) return next(new ErrorHandler("User not found. Please login to continue!", 403));

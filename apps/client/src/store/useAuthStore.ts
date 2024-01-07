@@ -7,8 +7,8 @@ import * as UserTypes from "../types/user.type";
 interface AuthStates {
     isLoading: boolean,
     message: string | null,
-
-    authUser: unknown,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    authUser: any | null,
     isAuthenticated: boolean,
     accessToken: string | null,
 }
@@ -31,6 +31,7 @@ const initialState: AuthStates = {
     isAuthenticated: false,
 };
 
+// useAuthStore
 export const useAuthStore = create<AuthStates & AuthActions>()(
     devtools((set) => ({
 
@@ -40,7 +41,8 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
         // login action
         loginUser: async (credentials) => {
             try {
-                set({ isLoading: true }); const { data } = await axios.post('/auth/login', credentials, { withCredentials: true, });
+                set({ isLoading: true });
+                const { data } = await axios.post('/auth/login', credentials, { withCredentials: true, });
 
                 set((state) => ({
                     ...state,
@@ -66,9 +68,7 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
         registerUser: async (credentials) => {
             try {
                 set({ isLoading: true });
-                const { data, status } = await axios.post('/auth/register', credentials, {
-                    withCredentials: true
-                });
+                const { data, status } = await axios.post('/auth/register', credentials, { withCredentials: true });
 
                 if (status === 201) {
                     set({

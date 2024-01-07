@@ -15,7 +15,7 @@ import adminRoutes from './src/routes/adminRoutes.js'
 import tokenRoutes from './src/routes/tokenRoutes.js'
 
 // dov env
-dotenv.config({path: '.env'});
+dotenv.config({ path: '.env' });
 
 // express app
 const app = express();

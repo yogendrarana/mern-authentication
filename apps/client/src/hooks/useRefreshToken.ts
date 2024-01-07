@@ -1,12 +1,21 @@
+import { useNavigate } from "@tanstack/react-router";
 import axios from "../axios/axios";
 import { useAuthStore } from "../store/useAuthStore";
 
+
 const useRefreshToken = () => {
-    async function refresh(): Promise<string> {
+    const navigate = useNavigate()
+
+    return async function refresh(): Promise<string | null> {
         try {
-            const { data } = await axios.get('/token/refresh', {
+            const { data, status } = await axios.get('/token/refresh', {
                 withCredentials: true
             });
+
+            if (status !== 200) {
+                navigate({ to: '/login' })
+                return null;
+            }
 
             // update the access token in the store
             useAuthStore.setState((state) => ({
@@ -25,13 +34,11 @@ const useRefreshToken = () => {
                 accessToken: null,
                 authUser: null,
             }));
+
+            navigate({ to: '/login' })
+            return null;
         }
-
-        return '';
     }
-
-    // return
-    return refresh;
 };
 
 export default useRefreshToken;
