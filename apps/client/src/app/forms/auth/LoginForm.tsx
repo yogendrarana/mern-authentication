@@ -9,7 +9,7 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
 
     // zustand store
-    const { loginUser, isLoading, isAuthenticated, message } = useAuthStore();
+    const { loginUser, isLoading, isAuthenticated, successMessage, errorMessage } = useAuthStore();
 
     // login handler
     const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,17 +24,17 @@ const LoginForm = () => {
 
     
     useEffect(() => {
-        if (isAuthenticated && message) {
-            toast.success(message);
+        if (isAuthenticated && successMessage) {
+            toast.success(successMessage);
             navigate({ to: '/' });
         }
 
-        if (!isAuthenticated && message) {
-            toast.error(message);
+        if (!isAuthenticated && errorMessage) {
+            toast.error(errorMessage);
         }
 
-        useAuthStore.setState((state) => ({ ...state, message: null }));
-    }, [isAuthenticated, message, navigate]);
+        useAuthStore.setState((state) => ({ ...state, successMessage: null, errorMessage: null }));
+    }, [isAuthenticated, successMessage, errorMessage, navigate]);
 
 
     return (

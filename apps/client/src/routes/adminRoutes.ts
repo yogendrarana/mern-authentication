@@ -5,6 +5,8 @@ import { Route } from "@tanstack/react-router";
 import AdminLayout from "../app/layouts/AdminLayout";
 import Dashboard from "../app/pages/admin/Dashboard";
 
+
+// admin route
 export const adminRoutes = new Route({
     getParentRoute: () => rootRoute,
     path: "admin",

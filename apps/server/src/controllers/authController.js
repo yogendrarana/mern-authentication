@@ -72,7 +72,7 @@ export const handleLogin = asyncHandler(async (req, res, next) => {
 // logout controller
 export const handleLogout = asyncHandler(async (req, res, next) => {
     const { refreshToken } = req.cookies;
-    if (!refreshToken) return next(new ErrorHandler('No token found!', 401));
+    if (!refreshToken) return next(new ErrorHandler('Refresh token is not available!', 401));
     const foundUser = await User.findOne({ refreshToken });
     if (!foundUser) return next(new ErrorHandler('User does not exist!', 403));
 

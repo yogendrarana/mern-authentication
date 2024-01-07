@@ -6,7 +6,9 @@ import * as UserTypes from "../types/user.type";
 // auth states
 interface AuthStates {
     isLoading: boolean,
-    message: string | null,
+    successMessage: string | null,
+    errorMessage: string | null,
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     authUser: any | null,
     isAuthenticated: boolean,
@@ -23,7 +25,8 @@ interface AuthActions {
 
 // initial states
 const initialState: AuthStates = {
-    message: null,
+    successMessage: null,
+    errorMessage: null,
     isLoading: false,
 
     authUser: null,
@@ -50,7 +53,7 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
                     isAuthenticated: true,
                     authUser: data.data.user,
                     accessToken: data.data.accessToken,
-                    message: data.message
+                    successMessage: data.message
                 }));
 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,7 +62,7 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
                     ...state,
                     isLoading: false,
                     isAuthenticated: false,
-                    message: err.response.data.message,
+                    errorMessage: err.response.data.message,
                 }));
             }
         },
@@ -74,8 +77,8 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
                     set({
                         isLoading: false,
                         isAuthenticated: true,
-                        message: data.message,
                         authUser: data.data.user,
+                        successMessage: data.message,
                         accessToken: data.data.accessToken
                     });
                 }
@@ -86,12 +89,36 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
                     ...state,
                     isLoading: false,
                     isAuthenticated: false,
-                    message: err.response.data.message,
+                    errorMessage: err.response.data.message,
                 }));
             }
         },
 
         // logout action
-        logoutUser: () => { },
+        logoutUser: async () => {
+            try {
+                set({ isLoading: true });
+                const { data, status } = await axios.get('/auth/logout', { withCredentials: true });
+
+                if (status === 200) {
+                    set({
+                        ...initialState,
+                        isLoading: false,
+                        isAuthenticated: false,
+                        successMessage: data.message,
+                        authUser: null,
+                        accessToken: null
+                    });
+                }
+
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (err: any) {
+                set((state) => ({
+                    ...state,
+                    isAuthenticated: true,
+                    errorMessage: err.response.data.message,
+                }));
+            }
+        },
     }))
 );

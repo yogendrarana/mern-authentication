@@ -12,7 +12,7 @@ const RegisterForm = () => {
     });
 
     // zustand store
-    const { registerUser, isLoading, isAuthenticated, message } = useAuthStore();
+    const { registerUser, isLoading, isAuthenticated, successMessage, errorMessage } = useAuthStore();
 
 
     // login handler
@@ -33,17 +33,17 @@ const RegisterForm = () => {
     }
 
     useEffect(() => {
-        if (isAuthenticated && message) {
-            toast.success(message);
+        if (isAuthenticated && successMessage) {
+            toast.success(successMessage);
             navigate({ to: '/' });
         }
 
-        if (!isAuthenticated && message) {
-            toast.error(message);
+        if (!isAuthenticated && errorMessage) {
+            toast.error(errorMessage);
         }
         
-        useAuthStore.setState((state) => ({ ...state, message: null }));
-    }, [isAuthenticated, message, navigate]);
+        useAuthStore.setState((state) => ({ ...state, successMessage: null, errorMessage: null }));
+    }, [isAuthenticated, successMessage, errorMessage, navigate]);
 
 
     return (
