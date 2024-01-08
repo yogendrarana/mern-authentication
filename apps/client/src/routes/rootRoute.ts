@@ -3,8 +3,8 @@ import { RootRoute, Route, Router } from '@tanstack/react-router'
 
 // import routes
 import * as authRoutes from './authRoutes'
-import * as userRoutes from './profileRoutes'
 import * as adminRoutes from './adminRoutes'
+import * as profileRoutes from './profileRoutes'
 
 
 // import components
@@ -30,8 +30,8 @@ export const indexRoute = new Route({
 export const routeTree = rootRoute.addChildren([
     indexRoute,
     authRoutes.loginRoute, authRoutes.registerRoute,
-    userRoutes.profileRoute,
-    adminRoutes.adminRoutes, adminRoutes.adminIndexRoute
+    adminRoutes.adminRoutes, adminRoutes.adminIndexRoute, adminRoutes.adminUserManagementRoute,
+    profileRoutes.profileRoute, profileRoutes.profileIndexRoute, profileRoutes.profileSettingsRoute,
 ]);
 
 

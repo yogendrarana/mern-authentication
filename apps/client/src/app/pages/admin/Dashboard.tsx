@@ -36,12 +36,8 @@ const Dashboard = () => {
     // }, []);
 
     return (
-        <div className="border">
-            <h1 className="font-bold">Dashboard</h1>
-
-            <div>
-                {/* <h2 className="font-bold">Number of users: {users?.length}</h2> */}
-            </div>
+        <div className="mt-[1rem] p-[2rem] border flex flex-col items-center">
+            <p className=" text-[1rem]">Users List</p>
         </div>
     );
 };
