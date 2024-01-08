@@ -1,5 +1,5 @@
-import { useNavigate } from "@tanstack/react-router";
 import axios from "../axios/axios";
+import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "../store/useAuthStore";
 
 
@@ -12,20 +12,19 @@ const useRefreshToken = () => {
                 withCredentials: true
             });
 
-            if (status !== 200) {
-                navigate({ to: '/login' })
-                return null;
+            if (status === 200) {
+                // update the access token in the store
+                useAuthStore.setState((state) => ({
+                    ...state,
+                    isAuthenticated: true,
+                    accessToken: data.data.accessToken,
+                    authUser: data.data.user,
+                }));
+
+                return data.data.accessToken;
             }
 
-            // update the access token in the store
-            useAuthStore.setState((state) => ({
-                ...state,
-                isAuthenticated: true,
-                accessToken: data.data.accessToken,
-                authUser: data.data.user,
-            }));
-
-            return data.data.accessToken;
+            return null;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             useAuthStore.setState((state) => ({

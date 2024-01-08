@@ -8,13 +8,13 @@ import * as profileRoutes from './profileRoutes'
 
 
 // import components
+import App from '../app/App';
 import HomePage from '../app/pages/home/HomePage';
-import RootLayout from '../app/layouts/RootLayout';
 
 
 // rootRoute is the root route for the app
 export const rootRoute = new RootRoute({
-    component: RootLayout
+    component: App
 });
 
 

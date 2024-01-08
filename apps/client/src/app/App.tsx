@@ -3,8 +3,8 @@ import { useEffect, useState } from "react"
 import { Outlet } from "@tanstack/react-router"
 
 // hooks
-import { useAuthStore } from "../../store/useAuthStore"
-import useRefreshToken from "../../hooks/useRefreshToken"
+import { useAuthStore } from "../store/useAuthStore"
+import useRefreshToken from "../hooks/useRefreshToken"
 
 const RootLayout = () => {
     const refresh = useRefreshToken();
@@ -19,7 +19,7 @@ const RootLayout = () => {
         let isMounted = true;
 
         // verify refresh token
-        const verifyRefreshToken = async () => {
+        const getNewAccessToken = async () => {
             try {
                 setIsLoading(true);
                 await refresh();
@@ -32,8 +32,8 @@ const RootLayout = () => {
             }
         }
 
-        // Avoids unwanted call to verifyRefreshToken
-        !accessToken ? verifyRefreshToken() : setIsLoading(false);
+        // Avoids unwanted call to getNewAccessToken
+        !accessToken ? getNewAccessToken() : setIsLoading(false);
 
         return () => {
             isMounted = false;

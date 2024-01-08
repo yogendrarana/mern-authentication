@@ -1,7 +1,10 @@
+import React from "react";
 import { Link, Outlet } from "@tanstack/react-router";
+
+// import components
 import Navbar from "../../components/navbar/Navbar";
 
-const ProfileLayout = () => {
+const ProfileLayout: React.FC = () => {
     return (
         <div className="p-[1rem]">
             <Navbar />
