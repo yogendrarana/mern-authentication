@@ -1,6 +1,6 @@
-import { User } from "../models/userModel.js";
-import ErrorHandler from "../util/errorHandler.js"
-import asyncHandler from "../util/asyncHandler.js";
+import { User } from "../models/user.model.js";
+import ErrorHandler from "../util/error.handler.js"
+import asyncHandler from "../util/async.handler.js";
 
 
 // register controller
@@ -87,4 +87,4 @@ export const handleLogout = asyncHandler(async (req, res, next) => {
         success: true,
         message: 'Logged out successfully!'
     })
-})
+});

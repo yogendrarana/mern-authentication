@@ -6,14 +6,14 @@ import { connectdb } from './src/config/database.js';
 import { corsOptions } from './src/config/corsOptions.js';
 
 // import middleware
-import ErrorMiddleware from './src/middlewares/errorMiddleware.js';
+import ErrorMiddleware from './src/middlewares/error.middleware.js';
 
 // import routes
-import authRoutes from './src/routes/authRoutes.js'
-import adminRoutes from './src/routes/adminRoutes.js'
-import tokenRoutes from './src/routes/tokenRoutes.js'
-import profileRoutes from './src/routes/profileRoute.js'
-
+import authRoutes from './src/routes/auth.route.js'
+import adminRoutes from './src/routes/admin.route.js'
+import tokenRoutes from './src/routes/token.route.js'
+import profileRoutes from './src/routes/profile.route.js'
+import sessionRoutes from './src/routes/session.route.js'
 
 // dov env
 dotenv.config({ path: '.env' });
@@ -41,6 +41,8 @@ app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/admin", adminRoutes)
 app.use("/api/v1/token", tokenRoutes)
 app.use("/api/v1/profile", profileRoutes)
+app.use("/api/v1/session", sessionRoutes)
+
 
 
 // error middleware

@@ -1,7 +1,8 @@
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../../../store/useAuthStore";
-import { useNavigate } from "@tanstack/react-router";
-import toast from "react-hot-toast";
+import { Link, useNavigate } from "@tanstack/react-router";
+import getGoogleAuthUrl from "../../../util/getGoogleAuthUrl";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -64,6 +65,14 @@ const LoginForm = () => {
             >
                 Login
             </button>
+
+            <hr className="w-full border"  />
+
+            <p className="text-center">Login with</p>
+
+            <div className="flex">
+                <Link to={getGoogleAuthUrl()} className="border-2 p-[0.5rem] rounded-md hover:bg-gray-200">Login with Google</Link>
+            </div>
         </form>
     )
 }

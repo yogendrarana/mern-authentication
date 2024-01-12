@@ -1,10 +1,8 @@
 import axios from "../axios/axios";
-import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "../store/useAuthStore";
 
 
 const useRefreshToken = () => {
-    const navigate = useNavigate()
 
     return async function refresh(): Promise<string | null> {
         try {
@@ -34,7 +32,7 @@ const useRefreshToken = () => {
                 authUser: null,
             }));
 
-            navigate({ to: '/login' })
+            // navigate({ to: '/login' })
             return null;
         }
     }

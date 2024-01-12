@@ -1,6 +1,5 @@
 import express from "express";
-import * as profileController from "../controllers/profileController.js";
-import * as authMiddleware from "../middlewares/authMiddleware.js";
+import * as profileController from "../controllers/profile.controller.js";
 
 const router = express.Router();
 

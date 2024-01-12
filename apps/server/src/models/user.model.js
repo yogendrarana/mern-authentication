@@ -6,6 +6,7 @@ import validator from "validator";
 const userSchema = new mongoose.Schema({
     name: { type: String, required: [true, 'Please enter your name!'] },
     email: { type: String, required: [true, 'Please enter your email!'], validate: validator.isEmail },
+    avatar: { type: String },
     password: {
         type: String,
         required: [true, 'Please enter the password!'],

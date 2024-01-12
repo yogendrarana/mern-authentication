@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { User } from '../models/userModel.js'
-import ErrorHandler from "../util/errorHandler.js";
+import { User } from '../models/user.model.js'
+import ErrorHandler from "../util/error.handler.js";
 
 // verify access token
 export const verifyAccessToken = (req, res, next) => {
