@@ -6,7 +6,7 @@ const Navbar = () => {
 
     return (
         <div className="p-[1rem] flex justify-between border">
-            <Link to="/" className="px-[0.25rem]">MERN JWT AUTH</Link>
+            <Link to="/" className="px-[0.25rem]">MERN AUTH</Link>
 
             <div className="flex gap-[1rem]">
                 {isAuthenticated && <Link to="/profile" className="border px-[0.25rem]">Profile</Link>}
