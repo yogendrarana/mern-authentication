@@ -10,7 +10,7 @@ const HomePage = () => {
             <Navbar />
 
             <div className="mt-[2rem] flex flex-col items-center">
-                <h1 className="mb-[5rem] font-bold">Welcome to Home Page</h1>
+                <h1 className="mb-[5rem] font-bold">Welcome</h1>
 
                 <div className="flex flex-col gap-[2rem] items-center">
                     <div>
