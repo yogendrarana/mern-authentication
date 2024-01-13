@@ -23,7 +23,6 @@ const RootLayout = () => {
             try {
                 setIsLoading(true);
                 await refresh();
-
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (err: any) {
                 setIsLoading(false);
