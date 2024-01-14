@@ -56,7 +56,8 @@ const useAxiosPrivate = () => {
         }
     }, [accessToken, refresh]);
 
-    // return
+    
+    // return private instance of axios
     return axiosPrivate;
 }
 

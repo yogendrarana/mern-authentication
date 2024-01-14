@@ -32,7 +32,6 @@ const useRefreshToken = () => {
                 authUser: null,
             }));
 
-            // navigate({ to: '/login' })
             return null;
         }
     }

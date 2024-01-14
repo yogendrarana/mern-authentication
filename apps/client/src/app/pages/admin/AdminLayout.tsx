@@ -1,5 +1,5 @@
-import { Link, Outlet } from "@tanstack/react-router"
 import Navbar from "../../components/navbar/Navbar";
+import { Link, Outlet } from "@tanstack/react-router";
 
 const AdminLayout = () => {
 

@@ -9,5 +9,6 @@ export const corsOptions = {
         }
     },
     optionsSuccessStatus: 200,
-    credentials: true
+    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }

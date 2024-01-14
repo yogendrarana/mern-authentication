@@ -5,15 +5,45 @@ import ErrorHandler from "../util/error.handler.js";
 
 export const handleRefreshToken = asyncHandler(async (req, res, next) => {
     const { refreshToken } = req.cookies;
-    if (!refreshToken) return next(new ErrorHandler("Refresh token is not available. Please login to continue!", 401));
+    if (!refreshToken) {
+        return next(new ErrorHandler("Refresh token is not found. Please login again.", 401));
+    }
 
-    const user = await User.findOne({ refreshToken });
-    if (!user) return next(new ErrorHandler("User not found. Please login to continue!", 403));
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
+        
+        if (err) {
+            if (err.name === 'TokenExpiredError') {
+                return next(new ErrorHandler("Refresh token has expired. Please login again.", 401));
+            } else {
+                return next(new ErrorHandler("Invalid token. Please login to continue!", 403));
+            }
+        }
 
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-        if (err || decoded._id.toString() !== user._id.toString()) return next(new ErrorHandler("Invalid token. Please login to continue!", 403));
+        const user = await User.findById(decoded._id);
+
+        // Check if the user exists
+        if (!user) {
+            return next(new ErrorHandler("User not found!", 404));
+        }
+        
+        // Check if the id associated with the refresh token matches the id of the user
+        if (decoded._id.toString() !== user._id.toString()) {
+            return next(new ErrorHandler("Invalid token. Please login to continue!", 403));
+        }
 
         const accessToken = user.createAccessToken();
+        const refreshToken = user.createRefreshToken();
+
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        res.cookie('refreshToken', refreshToken, { 
+            httpOnly: true, 
+            secure: true, 
+            sameSite: 'none', 
+            maxAge: 7 * 24 * 60 * 60 * 1000 
+        });
+
         
         res.status(200).json({
             success: true,

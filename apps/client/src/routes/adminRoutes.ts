@@ -2,9 +2,9 @@ import { rootRoute } from "./rootRoute";
 import { Route } from "@tanstack/react-router";
 
 // import pages
-import AdminLayout from "../app/pages/admin/AdminLayout";
 import Dashboard from "../app/pages/admin/Dashboard";
 import UsersList from "../app/pages/admin/UsersList";
+import AdminLayout from "../app/pages/admin/AdminLayout";
 
 
 // root route for the admin section

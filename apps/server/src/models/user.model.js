@@ -42,7 +42,7 @@ userSchema.methods.createAccessToken = function () {
 
 // create refresh token of random uuid
 userSchema.methods.createRefreshToken = function () {
-    return jwt.sign({ _id: this._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+    return jwt.sign({ _id: this._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
 }
 
 

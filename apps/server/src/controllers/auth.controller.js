@@ -21,7 +21,13 @@ export const handleRegister = asyncHandler(async (req, res, next) => {
     user.refreshToken = refreshToken;
     await user.save();
 
-    res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'none', maxAge: 24 * 60 * 60 * 1000 });
+    res.cookie('refreshToken', refreshToken, { 
+        httpOnly: true, 
+        secure: true, 
+        sameSite: 'none', 
+        maxAge: 7 * 24 * 60 * 60 * 1000 
+    });
+
 
     res.status(201).json({
         success: true,
@@ -51,11 +57,11 @@ export const handleLogin = asyncHandler(async (req, res, next) => {
     foundUser.refreshToken = refreshToken;
     await foundUser.save();
 
-    res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        maxAge: 24 * 60 * 60 * 1000
+    res.cookie('refreshToken', refreshToken, { 
+        httpOnly: true, 
+        secure: true, 
+        sameSite: 'none', 
+        maxAge: 7 * 24 * 60 * 60 * 1000 
     });
 
     res.status(200).json({
