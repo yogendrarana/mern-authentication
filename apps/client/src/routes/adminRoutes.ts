@@ -21,7 +21,7 @@ export const adminRoutes = new Route({
         } catch (err: any) {
             if (err.response && (err.response.status === 401 || err.response.status === 403)) {
                 toast.error(err.response.data.message);
-                throw redirect({ to: '/login' });
+                throw redirect({ to: '/' });
             }
         }
     }
@@ -33,23 +33,26 @@ export const adminIndexRoute = new Route({
     getParentRoute: () => adminRoutes,
     path: "/",
     component: Dashboard,
-    // loader: async () => {
-    //     try {
-    //         const { data, status } = await axiosPrivate.get('/admin/dashboard');
+    loader: async () => {
+        try {
+            const { data, status } = await axiosPrivate.get('/admin/dashboard');
 
-    //         if (status >= 400) {
-    //             return null;
-    //         }
+            if (status >= 400) {
+                return null;
+            }
 
-    //         return data.data;
-    //         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    //     } catch (err: any) {
-    //         toast.error("Unauthorized");
-    //         if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-    //             throw redirect({ to: '/' });
-    //         }
-    //     }
-    // }
+            return data.data;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            toast.error("Unauthorized");
+            if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+                toast.error(err.response.data.message);
+                throw redirect({ to: '/' });
+            }
+        }
+    },
+    shouldReload: () => true,
+    gcTime: 0
 });
 
 

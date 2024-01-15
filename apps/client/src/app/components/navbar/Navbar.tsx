@@ -2,7 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "../../../store/useAuthStore";
 
 const Navbar = () => {
-    const { logoutUser, isAuthenticated } = useAuthStore();
+    const { logoutUser, isAuthenticated, authUser } = useAuthStore();
     const navigate = useNavigate();
 
     return (
@@ -11,7 +11,7 @@ const Navbar = () => {
 
             <div className="flex gap-[1rem]">
                 {isAuthenticated && <Link to="/profile" className="border px-[0.25rem]">Profile</Link>}
-                {isAuthenticated && <Link to="/admin" className="border px-[0.25rem]">Admin</Link>}
+                {isAuthenticated && authUser && authUser.role==="admin" && <Link to="/admin" className="border px-[0.25rem]">Admin</Link>}
                 
                 <div className="mx-[1rem]"></div>
                 
