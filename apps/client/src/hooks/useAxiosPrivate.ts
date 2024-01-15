@@ -4,7 +4,7 @@ import axiosPrivate from "../axios/axiosPrivate";
 import { useAuthStore } from "../store/useAuthStore";
 
 const useAxiosPrivate = () => {
-    const refresh = useRefreshToken();
+    const refreshToken = useRefreshToken();
     const { accessToken } = useAuthStore();
 
     useEffect(() => {
@@ -32,7 +32,7 @@ const useAxiosPrivate = () => {
                     prevRequest.isSent = true;
 
                     // get the new access token
-                    const accessToken = await refresh();
+                    const accessToken = await refreshToken();
 
                     // if access token is null, make the user login again
                     // because refresh token is expired
@@ -54,7 +54,7 @@ const useAxiosPrivate = () => {
             axiosPrivate.interceptors.request.eject(requestIntercept);
             axiosPrivate.interceptors.response.eject(responseIntercept);
         }
-    }, [accessToken, refresh]);
+    }, [accessToken, refreshToken]);
 
     
     // return private instance of axios

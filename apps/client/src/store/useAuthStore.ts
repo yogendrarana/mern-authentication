@@ -115,8 +115,10 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
             } catch (err: any) {
                 set((state) => ({
                     ...state,
-                    isAuthenticated: true,
-                    errorMessage: err.response.data.message,
+                    isAuthenticated: false,
+                    isLoading: false,
+                    accessToken: null,
+                    errorMessage: err?.response?.data?.message,
                 }));
             }
         },

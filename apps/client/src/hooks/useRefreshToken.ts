@@ -4,7 +4,7 @@ import { useAuthStore } from "../store/useAuthStore";
 
 const useRefreshToken = () => {
 
-    return async function refresh(): Promise<string | null> {
+    return async function refreshToken(): Promise<string | null> {
         try {
             const { data, status } = await axios.get('/token/refresh', {
                 withCredentials: true

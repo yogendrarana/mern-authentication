@@ -7,7 +7,7 @@ import { useAuthStore } from "../store/useAuthStore"
 import useRefreshToken from "../hooks/useRefreshToken"
 
 const RootLayout = () => {
-    const refresh = useRefreshToken();
+    const refreshToken = useRefreshToken();
 
     // global state
     const { accessToken } = useAuthStore();
@@ -22,7 +22,7 @@ const RootLayout = () => {
         const getNewAccessToken = async () => {
             try {
                 setIsLoading(true);
-                await refresh();
+                await refreshToken();
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (err: any) {
                 setIsLoading(false);

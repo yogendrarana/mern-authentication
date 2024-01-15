@@ -1,5 +1,6 @@
 {
     "name": "@mern-jwt-auth/client",
+    "proxy": "http://localhost:8000",
     "private": true,
     "version": "0.0.0",
     "type": "module",

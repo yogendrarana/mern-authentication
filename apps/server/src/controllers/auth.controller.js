@@ -78,9 +78,16 @@ export const handleLogin = asyncHandler(async (req, res, next) => {
 // logout controller
 export const handleLogout = asyncHandler(async (req, res, next) => {
     const { refreshToken } = req.cookies;
-    if (!refreshToken) return next(new ErrorHandler('Refresh token is not available!', 401));
+
+    if (!refreshToken) {
+        return next(new ErrorHandler('Refresh token is not available!', 401));
+    }
+
     const foundUser = await User.findOne({ refreshToken });
-    if (!foundUser) return next(new ErrorHandler('User does not exist!', 403));
+
+    if (!foundUser) {
+        return next(new ErrorHandler('User does not exist!', 403));
+    }
 
     // delete refresh token from database
     foundUser.refreshToken = '';
@@ -89,8 +96,6 @@ export const handleLogout = asyncHandler(async (req, res, next) => {
     // delete cookie
     res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'none' });
 
-    res.status(200).json({
-        success: true,
-        message: 'Logged out successfully!'
-    })
+    // redirect to the client URL
+    return res.redirect(process.env.CLIENT_URL);
 });
