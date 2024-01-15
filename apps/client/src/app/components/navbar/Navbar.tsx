@@ -1,8 +1,9 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "../../../store/useAuthStore";
 
 const Navbar = () => {
     const { logoutUser, isAuthenticated } = useAuthStore();
+    const navigate = useNavigate();
 
     return (
         <div className="p-[1rem] flex justify-between border">
@@ -16,7 +17,10 @@ const Navbar = () => {
                 
                 {!isAuthenticated && <Link to="/login" className="border px-[0.25rem]">Login</Link>}
                 {!isAuthenticated && <Link to="/register" className="border px-[0.25rem]">Register</Link>}
-                {isAuthenticated && <button onClick={() => logoutUser()} className="border px-[0.25rem] hover:bg-gray-200">Logout</button>}
+                {isAuthenticated && <button onClick={() => {
+                    logoutUser();
+                    navigate({to: '/'})
+                }} className="border px-[0.25rem] hover:bg-gray-200">Logout</button>}
             </div>
         </div>
     )

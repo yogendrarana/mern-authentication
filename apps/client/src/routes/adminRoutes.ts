@@ -1,4 +1,4 @@
-// import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 import { rootRoute } from "./rootRoute";
 import axiosPrivate from "../axios/axiosPrivate";
 import { Route, redirect } from "@tanstack/react-router";
@@ -15,13 +15,15 @@ export const adminRoutes = new Route({
     path: "admin",
     component: AdminLayout,
     beforeLoad: async () => {
-        const { status } = await axiosPrivate.get('/admin');
-
-        if (status >= 400) {
-            throw redirect({ to: '/login' });
+        try {
+            await axiosPrivate.get('/admin');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+                toast.error(err.response.data.message);
+                throw redirect({ to: '/login' });
+            }
         }
-
-        return true;
     }
 });
 
