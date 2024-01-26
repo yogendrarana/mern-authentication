@@ -1,6 +1,6 @@
 import asyncHandler from "../util/async.handler.js";
 import * as userService from "../service/account.service.js";
-import {Account} from "../models/account.model.js";
+import { Account } from "../models/account.model.js";
 
 export const googleOauthHandler = asyncHandler(async (req, res, next) => {
 
@@ -9,7 +9,7 @@ export const googleOauthHandler = asyncHandler(async (req, res, next) => {
 
     // get the id and access token from google using above code 
     const googleToken = await userService.getGoogleOauthToken({ code });
-    
+
     // get the user info from google using above access token
     const googleUser = await userService.getGoogleUser({ access_token: googleToken.access_token });
 
@@ -31,8 +31,8 @@ export const googleOauthHandler = asyncHandler(async (req, res, next) => {
         new: true,
     })
 
-    const accessToken = account.getAccessToken();
-    const refreshToken = account.getRefreshToken();
+    const accessToken = account.createAccessToken();
+    const refreshToken = account.createRefreshToken();
 
     // create a session for the user
 
@@ -46,7 +46,7 @@ export const googleOauthHandler = asyncHandler(async (req, res, next) => {
 
     // redirect back to the client
     res.redirect(process.env.CLIENT_URL);
-    
+
     // send response
     res.status(200).json({
         success: true,

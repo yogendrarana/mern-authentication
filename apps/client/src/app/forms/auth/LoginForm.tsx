@@ -23,7 +23,7 @@ const LoginForm = () => {
         loginUser({ email, password })
     }
 
-    
+
     useEffect(() => {
         if (isAuthenticated && successMessage) {
             toast.success(successMessage);
@@ -66,9 +66,7 @@ const LoginForm = () => {
                 Login
             </button>
 
-            <hr className="w-full border"  />
-
-            <p className="text-center">Login with</p>
+            <hr className="w-full border" />
 
             <div className="flex">
                 <Link to={getGoogleAuthUrl()} className="border-2 p-[0.5rem] rounded-md hover:bg-gray-200">Login with Google</Link>
