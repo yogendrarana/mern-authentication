@@ -17,3 +17,17 @@ export const getDashboardData = asyncHandler(async (req: Request, res: Response,
         }
     })
 });
+
+
+// get users list
+export const getUsersList = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const users = await User.find().select('-password -refreshTokens -__v').exec();
+
+    res.status(200).json({
+        success: true,
+        message: "Fetched users list successfully!",
+        data: {
+            users
+        }
+    })
+});

@@ -8,6 +8,7 @@ import * as adminController from "../controllers/admin.controller.js";
 
 // define routes
 router.route('/dashboard').get(authMiddleware.verifyAccessToken, roleMiddleware.verifyAdminRole, adminController.getDashboardData);
+router.route('/users').get(authMiddleware.verifyAccessToken, roleMiddleware.verifyAdminRole, adminController.getUsersList);
 
 // export router
 export default router;

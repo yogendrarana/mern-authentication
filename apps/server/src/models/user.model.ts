@@ -12,7 +12,6 @@ interface IUser {
     comparePassword(password: string): Promise<boolean>;
     createAccessToken(): string;
     createRefreshToken(): string;
-
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -22,10 +21,10 @@ const userSchema = new mongoose.Schema<IUser>({
     password: {
         type: String,
         required: [true, 'Please enter the password!'],
-        minLength: [8, "Password should be at least six characters long!"]
+        minLength: [8, "Password should be at least six characters long!"],
     },
     role: { type: String, enum: ['user', 'admin', 'employee'], default: 'user' },
-    refreshTokens: [{ type: String }],
+    refreshTokens: { type: [String], default: [] },
 }, {
     timestamps: true,
 })
@@ -33,7 +32,9 @@ const userSchema = new mongoose.Schema<IUser>({
 
 // hash password
 userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) next();
+    if (!this.isModified('password')) {
+        return next();
+    }
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
     return next();

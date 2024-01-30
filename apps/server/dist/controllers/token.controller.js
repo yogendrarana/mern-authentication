@@ -13,34 +13,50 @@ export const handleRefreshToken = asyncHandler(async (req, res, next) => {
                 return next(new ErrorHandler(401, "Refresh token has expired. Please login again."));
             }
             else {
-                return next(new ErrorHandler(403, "Invalid token. Please login to continue!"));
+                return next(new ErrorHandler(403, "Invalid token. Please login again to continue!"));
             }
         }
-        const user = await User.findById(decoded._id);
+        // check if the user exists 
+        const foundUser = await User.findById(decoded._id).select('-__v').exec();
+        // for some reason follwing code for fetching user by refresh token doesn't work in chrome and brave browser
+        // works fine in firefox but not in chrome and brave browser
+        // main suspect is because of useEffect in client side sending the request twice due to React.StrictMode
+        // const foundUser = await User.findOne({
+        //     refreshTokens: {
+        //         $elemMatch: {
+        //             $eq: refreshToken,
+        //         },
+        //     },
+        // }).exec();
         // Check if the user exists
-        if (!user) {
-            return next(new ErrorHandler(404, "User not found!"));
+        if (!foundUser) {
+            return next(new ErrorHandler(404, "User associated with this token does not exist!"));
         }
-        // Check if the id associated with the refresh token matches the id of the user
-        if (decoded._id.toString() !== user._id.toString()) {
-            return next(new ErrorHandler(403, "Invalid token. Please login to continue!"));
-        }
-        const accessToken = user.createAccessToken();
-        const refreshToken = user.createRefreshToken();
-        user.refreshTokens.push(refreshToken);
-        await user.save();
-        res.cookie('refreshToken', refreshToken, {
+        // generate new access token and refresh token
+        const newAccessToken = foundUser.createAccessToken();
+        const newRefreshToken = foundUser.createRefreshToken();
+        // Update refresh tokens array in the database
+        // cannnot use .save() here because it will cause race condition and cause error:VersionError: No matching document found for id
+        // instead use findOneAndUpdate() which ignores the version (__v) and updates the document directly
+        await User.findOneAndUpdate({ _id: decoded._id }, {
+            $set: {
+                refreshTokens: foundUser.refreshTokens.map((token) => token === refreshToken ? newRefreshToken : token),
+            },
+        });
+        // set the new refresh token in the cookie
+        res.cookie('refreshToken', newRefreshToken, {
             httpOnly: true,
             secure: true,
             sameSite: 'none',
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
+        // send the new access token and user data in the response
         res.status(200).json({
             success: true,
             message: "Access token generated successfully!",
             data: {
-                accessToken,
-                user
+                accessToken: newAccessToken,
+                user: foundUser
             }
         });
     });
