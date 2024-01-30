@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext" /* Specify module system (CommonJS for Node.js) */,
+    "moduleResolution": "NodeNext" /* Specify how modules are resolved */,
+    "target": "ES2020" /* Specify ECMAScript target version */,
+    "strict": true /* Enable all strict type-checking options */,
+
+    "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
+    "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file.*/,
+    "skipLibCheck": true /* Skip type checking of declaration files like.*/,
+
+    "rootDir": "./src" /* Specify the root directory of input files */,
+    "outDir": "./dist" /* Specify an output directory for the compiled files */
+  },
+  "include": ["src/**/*"]
+}
