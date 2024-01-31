@@ -14,17 +14,17 @@ export const adminRoutes = new Route({
     getParentRoute: () => rootRoute,
     path: "admin",
     component: AdminLayout,
-    beforeLoad: async () => {
-        try {
-            await axiosPrivate.get('/admin');
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-            if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-                toast.error(err.response.data.message);
-                throw redirect({ to: '/' });
-            }
-        }
-    }
+    // beforeLoad: async () => {
+    //     try {
+    //         await axiosPrivate.get('/admin');
+    //         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    //     } catch (err: any) {
+    //         if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+    //             toast.error(err.response.data.message);
+    //             throw redirect({ to: '/' });
+    //         }
+    //     }
+    // }
 });
 
 

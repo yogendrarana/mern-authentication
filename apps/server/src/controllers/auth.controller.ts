@@ -33,7 +33,7 @@ export const registerUser = asyncHandler(async (req: Request, res: Response, nex
     // check if email is already used
     const isEmailUsed = await User.findOne({ email }).exec();
     if (isEmailUsed) {
-        return next(new ErrorHandler(400, "Email is already used!"));
+        return next(new ErrorHandler(409, "Email is already used!"));
     }
 
     // create user
@@ -67,13 +67,14 @@ export const registerUser = asyncHandler(async (req: Request, res: Response, nex
 
 // login controller
 export const loginUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const cookies = req.cookies;
     const { email, password } = req.body;
+
     if (!email || !password) {
         return next(new ErrorHandler(400, 'Please enter all the fields!'));
     }
 
     const foundUser = await User.findOne({ email }).select('-__v').exec();
-    console.log('foundUser: ', foundUser?.refreshTokens)
     if (!foundUser) {
         return next(new ErrorHandler(400, 'User does not exist!'));
     }
@@ -84,15 +85,19 @@ export const loginUser = asyncHandler(async (req: Request, res: Response, next: 
     }
 
     // create tokens 
-    const accessToken = foundUser.createAccessToken();
-    const refreshToken = foundUser.createRefreshToken();
+    const newAccessToken = foundUser.createAccessToken();
+    const newRefreshToken = foundUser.createRefreshToken();
 
     // save refresh token in database
-    const refreshTokenArray = foundUser.refreshTokens;
-    foundUser.refreshTokens = [...refreshTokenArray, refreshToken];
+    let newRefreshTokenArray = cookies?.refreshToken ? foundUser.refreshTokens.filter(rt => rt !== cookies.refreshToken) : foundUser.refreshTokens;
+    if (cookies?.refreshToken) {
+        res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'none' });
+    }
+
+    foundUser.refreshTokens = [...newRefreshTokenArray, newRefreshToken];
     await foundUser.save();
 
-    res.cookie('refreshToken', refreshToken, {
+    res.cookie('refreshToken', newRefreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
@@ -103,7 +108,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response, next: 
         success: true,
         message: 'Logged in successfully!',
         data: {
-            accessToken,
+            accessToken: newAccessToken,
             user: foundUser
         }
     })
@@ -127,6 +132,7 @@ export const logoutUser = asyncHandler(async (req: AuthenticatedRequest, res: Re
     }).exec();
 
     if (!foundUser) {
+        res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'none' });
         return next(new ErrorHandler(403, 'User does not exist!'));
     }
 

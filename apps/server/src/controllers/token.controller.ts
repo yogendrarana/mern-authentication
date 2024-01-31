@@ -10,51 +10,46 @@ export const handleRefreshToken = asyncHandler(async (req: Request, res: Respons
         return next(new ErrorHandler(401, "Refresh token is not found. Please login again."));
     }
 
+    const foundUser = await User.findOne({ refreshTokens: refreshToken }).exec();
+
+    if (!foundUser) {
+        // detected token reuse we can try to solve it by deleting the refresh tokens of the user associated to the refresh token
+        // jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!, async (err: any, decoded: any) => {
+        //     if (err) return res.sendStatus(403);
+        //     const hackedUser = await User.findById(decoded._id).exec();
+        //     if (!hackedUser) return res.sendStatus(403);
+        //     hackedUser.refreshTokens = [];
+        // });
+
+        return next(new ErrorHandler(403, "User associated to refresh token does not exist!"));
+    };
+
+    // new refresh token array without the current refresh token
+    const newRefreshTokenArray = foundUser.refreshTokens.filter(rt => rt !== refreshToken);
+
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!, async (err: any, decoded: any) => {
         if (err) {
-            if (err.name === 'TokenExpiredError') {
-                return next(new ErrorHandler(401, "Refresh token has expired. Please login again."));
-            } else {
-                return next(new ErrorHandler(403, "Invalid token. Please login again to continue!"));
-            }
+            foundUser.refreshTokens = [...newRefreshTokenArray];
+            await foundUser.save();
+            res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'none' });
+            return next(new ErrorHandler(403, "Invalid or expired token. Please login again to continue!"));
         }
 
-        // check if the user exists 
-        const foundUser = await User.findById(decoded._id).select('-__v').exec();
-
-        // for some reason follwing code for fetching user by refresh token doesn't work in chrome and brave browser
-        // works fine in firefox but not in chrome and brave browser
-        // main suspect is because of useEffect in client side sending the request twice due to React.StrictMode
-        // const foundUser = await User.findOne({
-        //     refreshTokens: {
-        //         $elemMatch: {
-        //             $eq: refreshToken,
-        //         },
-        //     },
-        // }).exec();
-
-        // Check if the user exists
-        if (!foundUser) {
-            return next(new ErrorHandler(404, "User associated with this token does not exist!"));
+        // check if the user id and the decoded user id are same
+        if (decoded._id.toString() !== foundUser._id.toString()) {
+            foundUser.refreshTokens = [...newRefreshTokenArray];
+            await foundUser.save();
+            res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'none' });
+            return next(new ErrorHandler(403, "Token does not belong to the user. Please login again to continue"));
         }
 
         // generate new access token and refresh token
         const newAccessToken = foundUser.createAccessToken();
         const newRefreshToken = foundUser.createRefreshToken();
 
-        // Update refresh tokens array in the database
-        // cannnot use .save() here because it will cause race condition and cause error:VersionError: No matching document found for id
-        // instead use findOneAndUpdate() which ignores the version (__v) and updates the document directly
-        await User.findOneAndUpdate(
-            { _id: decoded._id },
-            {
-                $set: {
-                    refreshTokens: foundUser.refreshTokens.map((token) =>
-                        token === refreshToken ? newRefreshToken : token
-                    ),
-                },
-            },
-        );
+        // update refresh tokens array in the database
+        foundUser.refreshTokens = [...newRefreshTokenArray, newRefreshToken];
+        await foundUser.save();
 
         // set the new refresh token in the cookie
         res.cookie('refreshToken', newRefreshToken, {

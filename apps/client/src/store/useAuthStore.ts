@@ -41,32 +41,6 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
         // initial states
         ...initialState,
 
-        // login action
-        loginUser: async (credentials) => {
-            try {
-                set({ isLoading: true });
-                const { data } = await axios.post('/auth/login', credentials, { withCredentials: true, });
-
-                set((state) => ({
-                    ...state,
-                    isLoading: false,
-                    isAuthenticated: true,
-                    authUser: data.data.user,
-                    accessToken: data.data.accessToken,
-                    successMessage: data.message
-                }));
-
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } catch (err: any) {
-                set((state) => ({
-                    ...state,
-                    isLoading: false,
-                    isAuthenticated: false,
-                    errorMessage: err.response.data.message,
-                }));
-            }
-        },
-
         // register action
         registerUser: async (credentials) => {
             try {
@@ -89,10 +63,40 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
                     ...state,
                     isLoading: false,
                     isAuthenticated: false,
-                    errorMessage: err.response.data.message,
+                    errorMessage: err?.response?.data.message || err.message,
                 }));
             }
         },
+
+
+        // login action
+        loginUser: async (credentials) => {
+            try {
+                set({ isLoading: true });
+                const { data, status } = await axios.post('/auth/login', credentials, { withCredentials: true, });
+
+                if (status === 200) {
+                    set((state) => ({
+                        ...state,
+                        isLoading: false,
+                        isAuthenticated: true,
+                        authUser: data.data.user,
+                        accessToken: data.data.accessToken,
+                        successMessage: data.message
+                    }));
+                }
+
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (err: any) {
+                set((state) => ({
+                    ...state,
+                    isLoading: false,
+                    isAuthenticated: false,
+                    errorMessage: err?.response?.data.message || err.message,
+                }));
+            }
+        },
+
 
         // logout action
         logoutUser: async () => {
@@ -118,7 +122,7 @@ export const useAuthStore = create<AuthStates & AuthActions>()(
                     isAuthenticated: false,
                     isLoading: false,
                     accessToken: null,
-                    errorMessage: err?.response?.data?.message,
+                    errorMessage: err?.response?.data?.message || err.message,
                 }));
             }
         },
