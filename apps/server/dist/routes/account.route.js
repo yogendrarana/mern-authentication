@@ -1,8 +1,8 @@
 import express from 'express';
 const router = express.Router();
 // import controllers
-import * as sessionCOntroller from '../controllers/account.controller.js';
+import * as accountController from '../controllers/account.controller.js';
 // define routes
-router.route('/oauth/google').get(sessionCOntroller.googleOauthHandler);
+router.route('/google/oauth/callback').get(accountController.googleOauthHandler);
 // export router
 export default router;

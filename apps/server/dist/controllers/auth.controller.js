@@ -2,6 +2,8 @@ import { User } from "../models/user.model.js";
 import ErrorHandler from "../util/error.handler.js";
 import * as authSchema from "../zod/auth.schema.js";
 import asyncHandler from "../util/async.handler.js";
+import { Account } from "../models/account.model.js";
+import * as authService from "../service/auth.service.js";
 // register controller
 export const registerUser = asyncHandler(async (req, res, next) => {
     const { name, email, password, confirm_password } = req.body;
@@ -115,5 +117,41 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: 'Logged out successfully!',
+    });
+});
+// google oauth handler
+export const googleOauthHandler = asyncHandler(async (req, res, next) => {
+    // get the code from the request
+    const code = req.query.code;
+    // Check if code is present
+    if (!code) {
+        return next(new ErrorHandler(400, 'OAuth code is not present.'));
+    }
+    // get the id and access token from google using the code 
+    const googleToken = await authService.getGoogleOauthToken({ code });
+    // get the user info from google using above access token
+    const googleUser = await authService.getGoogleUserInfo({ access_token: googleToken.access_token });
+    // upsert the user info in the database
+    const account = await Account.findOneAndUpdate({ email: googleUser.email, }, { id: googleUser.id, name: googleUser.name, email: googleUser.email, avatar: googleUser.picture, verified_email: googleUser.verified_email, }, { new: true, upsert: true, runValidators: true, });
+    const accessToken = account.createAccessToken();
+    const refreshToken = account.createRefreshToken();
+    // create a session for the user
+    // set cookies in the response
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        maxAge: 24 * 60 * 60 * 1000
+    });
+    // redirect back to the client
+    res.redirect(process.env.CLIENT_URL);
+    // send response
+    res.status(200).json({
+        success: true,
+        message: "Google OAuth",
+        data: {
+            account,
+            accessToken,
+        }
     });
 });

@@ -9,7 +9,6 @@ import authRoutes from './routes/auth.route.js';
 import adminRoutes from './routes/admin.route.js';
 import tokenRoutes from './routes/token.route.js';
 import profileRoutes from './routes/profile.route.js';
-import accountRoutes from './routes/account.route.js';
 // import middleware
 import ErrorMiddleware from './middlewares/error.middleware.js';
 // dov env
@@ -28,7 +27,6 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/token", tokenRoutes);
 app.use("/api/v1/profile", profileRoutes);
-app.use("/api/v1/session", accountRoutes);
 // error middleware
 app.use(ErrorMiddleware);
 // port
