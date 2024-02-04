@@ -1,6 +1,9 @@
 import Navbar from "../../components/navbar/Navbar";
 import { useAuthStore } from "../../../store/useAuthStore";
 
+// components
+import Posts from "../../components/posts/Posts";
+
 const HomePage = () => {
     const { isAuthenticated, accessToken } = useAuthStore();
     const accessTokenArray = accessToken?.split(".");
@@ -28,6 +31,8 @@ const HomePage = () => {
                     </div>
                 </div>
             </div>
+
+            <Posts />
         </div>
     )
 }

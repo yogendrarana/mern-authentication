@@ -133,9 +133,10 @@ export const googleOauthHandler = asyncHandler(async (req, res, next) => {
     const googleUser = await authService.getGoogleUserInfo({ access_token: googleToken.access_token });
     // upsert the user info in the database
     const account = await Account.findOneAndUpdate({ email: googleUser.email, }, { id: googleUser.id, name: googleUser.name, email: googleUser.email, avatar: googleUser.picture, verified_email: googleUser.verified_email, }, { new: true, upsert: true, runValidators: true, });
+    // create a session for the user or implement token based authentication
+    // here i will be using token based authentication
     const accessToken = account.createAccessToken();
     const refreshToken = account.createRefreshToken();
-    // create a session for the user
     // set cookies in the response
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
@@ -144,7 +145,7 @@ export const googleOauthHandler = asyncHandler(async (req, res, next) => {
         maxAge: 24 * 60 * 60 * 1000
     });
     // redirect back to the client
-    res.redirect(process.env.CLIENT_URL);
+    // res.redirect(process.env.CLIENT_URL!);
     // send response
     res.status(200).json({
         success: true,

@@ -5,11 +5,11 @@ import queryString from 'query-string';
 // and get access token and id token from google
 
 interface GoogleOauthTokenResponse {
-    access_token: string;
     id_token: string;
+    access_token: string;
 }
 
-export const getGoogleOauthToken = async ({ code, }: { code: string; }): Promise<GoogleOauthTokenResponse> => {
+export const getGoogleOauthToken = async ({ code }: { code: string; }): Promise<GoogleOauthTokenResponse> => {
     const url = 'https://oauth2.googleapis.com/token';
 
     const values = {
@@ -20,15 +20,11 @@ export const getGoogleOauthToken = async ({ code, }: { code: string; }): Promise
         grant_type: 'authorization_code',
     };
 
-    const { data } = await axios.post<GoogleOauthTokenResponse>(
-        url,
-        queryString.stringify(values),
-        {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        }
-    );
+    const { data } = await axios.post<GoogleOauthTokenResponse>(url, queryString.stringify(values), {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    });
 
     return data;
 };

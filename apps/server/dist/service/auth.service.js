@@ -1,6 +1,6 @@
 import axios from 'axios';
 import queryString from 'query-string';
-export const getGoogleOauthToken = async ({ code, }) => {
+export const getGoogleOauthToken = async ({ code }) => {
     const url = 'https://oauth2.googleapis.com/token';
     const values = {
         code,

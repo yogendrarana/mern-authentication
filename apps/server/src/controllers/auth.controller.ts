@@ -176,10 +176,11 @@ export const googleOauthHandler = asyncHandler(async (req: Request, res: Respons
         { new: true, upsert: true, runValidators: true, }
     );
 
+    // create a session for the user or implement token based authentication
+    // here i will be using token based authentication
+
     const accessToken = account.createAccessToken();
     const refreshToken = account.createRefreshToken();
-
-    // create a session for the user
 
     // set cookies in the response
     res.cookie('refreshToken', refreshToken, {
@@ -190,7 +191,7 @@ export const googleOauthHandler = asyncHandler(async (req: Request, res: Respons
     });
 
     // redirect back to the client
-    res.redirect(process.env.CLIENT_URL!);
+    // res.redirect(process.env.CLIENT_URL!);
 
     // send response
     res.status(200).json({
