@@ -1,5 +1,5 @@
 {
-    "name": "@mern-jwt-auth/server",
+    "name": "@mern/server",
     "type": "module",
     "version": "1.0.0",
     "description": "",

@@ -1,10 +1,10 @@
 {
-    "name": "mern-jwt-auth",
+    "name": "mern",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "concurrently \"npm run dev --workspace apps/client\" \"npm run dev --workspace apps/server\""
+        "dev": "concurrently \"yarn workspace @mern/client dev\" \"yarn workspace @mern/server dev\""
     },
     "keywords": [],
     "author": "",

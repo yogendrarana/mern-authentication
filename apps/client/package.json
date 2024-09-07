@@ -1,5 +1,5 @@
 {
-    "name": "@mern-jwt-auth/client",
+    "name": "@mern/client",
     "proxy": "http://localhost:8000",
     "private": true,
     "version": "0.0.0",
@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "@tanstack/react-query": "^5.18.1",
+        "@tanstack/react-query-devtools": "^5.18.1",
         "@tanstack/react-router": "^1.1.6",
         "axios": "^1.6.4",
         "jwt-decode": "^4.0.0",
